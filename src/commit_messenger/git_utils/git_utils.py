@@ -7,6 +7,7 @@ class GitUtils:
         self.repo = repo
 
     def get_git_diff(self):
+
         return self.repo.index.diff("HEAD")
 
     def see_added_files(self):
@@ -26,9 +27,3 @@ class GitUtils:
         commit = self.repo.index.commit(commit_message)
         print(f'Successfuly commited with message: {commit_message} with hash {commit.hexsha}')
 
-
-#Define a function just to get the added files
-
-#Define a function to get the git diff from all staged files
-
-#Define a function to commit the files from the staging area using a commit message
