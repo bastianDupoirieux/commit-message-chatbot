@@ -205,3 +205,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+#Add dev notes
+dev_notes.md
+
+#Ignore intellij specific stuff
+.idea/
