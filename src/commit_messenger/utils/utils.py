@@ -32,13 +32,23 @@ class Config:
         self.config = config
         self.config_keys = ["commit_mode", "files_to_ignore"] # the required fields
         #Is there a better way to write these required fields outside the class defintion, without a config for the config?
+        project_handler = ProjectHandler()
+        self.project_files = project_handler.files_in_dir
 
     def run_config_checks(self):
         """Check if the config passed is correct"""
+        # Check if the required keys are present in the config
         keys_passed = self.config.keys()
         for key in self.config_keys:
             if key not in keys_passed:
                 raise KeyError(f"Missing key value {key} in config")
+
+        #Check if the file that should be ignored in the config is unique in the working dir
+        for f in self.config["files_to_ignore"]:
+            if len(self.project_files[f]) > 1:
+                raise ValueError(f"File {f} exists multiple times in the working directory"
+                                 f"as files {', '.join(self.project_files[f])}, please specify"
+                                 f"which files should be ignored in the config")
 
     def create_error_if_file_should_be_ignored(self, file:os.path):
         if file in self.config["files_to_ignore"]:
@@ -63,8 +73,3 @@ class ProjectHandler:
                     all_files[f].append(filepath)
 
         self.files_in_dir = all_files
-
-
-    def find_occurences_of_file_in_dir(self, file) -> list:
-        return self.files_in_dir[file]
-
