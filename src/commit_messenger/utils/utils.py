@@ -47,9 +47,24 @@ class Config:
 class ProjectHandler:
     def __init__(self):
         self.dir = os.getcwd()
-        folders_to_ignore = ['.git', '.venv', 'venv', 'env', '.idea'] #certain directories are just technical and should be ignored anyway
+        directories_to_ignore = [os.path.join(self.dir, '.git'),
+                                 os.path.join(self.dir, '.venv'),
+                                 os.path.join(self.dir, 'venv'),
+                                 os.path.join(self.dir, 'env'),
+                                 os.path.join(self.dir, '.idea')] #certain directories are just technical and should be ignored anyway
+        all_files = {} #a dictionary containing the paths to all different files
+        for root, dirs, files in os.walk(self.dir):
+            dirs[:] = [d for d in dirs if os.path.join(root, d) not in directories_to_ignore]
+
+            for f in files:
+                all_files[f] = []
+                filepath = os.path.join(root, f)
+                if os.path.isfile(filepath):
+                    all_files[f].append(filepath)
+
+        self.files_in_dir = all_files
 
 
+    def find_occurences_of_file_in_dir(self, file) -> list:
+        return self.files_in_dir[file]
 
-    def find_occurence_of_file_in_dir(self, file) -> list:
-        pass
