@@ -44,6 +44,10 @@ class Config:
             if key not in keys_passed:
                 raise KeyError(f"Missing key value {key} in config")
 
+        if type(self.config["files_to_ignore"]) != list:
+            type_given = self.config["files_to_ignore"]
+            raise TypeError(f"files_to_ignore must be a list, given type {type_given}")
+
         #Check if the file that should be ignored in the config is unique in the working dir
         for f in self.config["files_to_ignore"]:
             if len(self.project_files[f]) > 1:
