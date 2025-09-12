@@ -1,5 +1,6 @@
 from git import Repo
 import os
+from collections import defaultdict
 
 class GitUtils:
 
@@ -51,6 +52,15 @@ class Config:
                                  f"which files should be ignored in the config")
 
     def create_error_if_file_should_be_ignored(self, file:os.path):
+        """
+        Raise an error if a file should be ignored. Handles files differently depending on whether
+        the absolute path of the file has been given
+        :param file:
+        :return:
+        """
+
+        if os.path.isfile(file):
+            pass # Do I need any handling depending on whether it is a path or just a basename?
         if file in self.config["files_to_ignore"]:
             raise ValueError(f"File {file} should be ignored, commit message can't be generated")
 
@@ -62,12 +72,12 @@ class ProjectHandler:
                                  os.path.join(self.dir, 'venv'),
                                  os.path.join(self.dir, 'env'),
                                  os.path.join(self.dir, '.idea')] #certain directories are just technical and should be ignored anyway
-        all_files = {} #a dictionary containing the paths to all different files
+        all_files = defaultdict(list) #a dictionary containing the paths to all different files
+        # This loop doesn't work properly, when running in the top directory __init__.py should have at least two occurences
         for root, dirs, files in os.walk(self.dir):
             dirs[:] = [d for d in dirs if os.path.join(root, d) not in directories_to_ignore]
 
             for f in files:
-                all_files[f] = []
                 filepath = os.path.join(root, f)
                 if os.path.isfile(filepath):
                     all_files[f].append(filepath)
