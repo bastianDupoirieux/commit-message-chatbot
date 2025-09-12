@@ -1,4 +1,5 @@
 from git import Repo
+import os
 
 class GitUtils:
 
@@ -25,4 +26,21 @@ class GitUtils:
     def commit_added_files(self, commit_message):
         commit = self.repo.index.commit(commit_message)
         print(f'Successfuly commited with message: {commit_message} and hash {commit.hexsha}')
+
+class Config:
+    def __init__(self, config:dict):
+        self.config = config
+        self.config_keys = ["commit_mode", "files_to_ignore"] # the required fields
+        #Is there a better way to write these required fields outside the class defintion, without a config for the config?
+
+    def run_config_checks(self):
+        """Check if the config passed is correct"""
+        keys_passed = self.config.keys()
+        for key in self.config_keys:
+            if key not in keys_passed:
+                raise KeyError(f"Missing key value {key} in config")
+
+    def create_error_if_file_should_be_ignored(self, file:os.path):
+        if file in self.config["files_to_ignore"]:
+            raise ValueError(f"File {file} should be ignored, commit message can't be generated")
 
