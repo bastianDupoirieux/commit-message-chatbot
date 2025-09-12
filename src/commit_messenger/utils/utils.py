@@ -44,3 +44,12 @@ class Config:
         if file in self.config["files_to_ignore"]:
             raise ValueError(f"File {file} should be ignored, commit message can't be generated")
 
+class ProjectHandler:
+    def __init__(self):
+        self.dir = os.getcwd()
+        folders_to_ignore = ['.git', '.venv', 'venv', 'env', '.idea'] #certain directories are just technical and should be ignored anyway
+
+
+
+    def find_occurence_of_file_in_dir(self, file) -> list:
+        pass
