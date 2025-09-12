@@ -1,0 +1,4 @@
+#This file contains the name of a file that should be ignored, the test muss throw an error to pass
+commit_mode: "standard"
+
+files_to_ignore: ["duplicate_file_for_config_testing.py"]

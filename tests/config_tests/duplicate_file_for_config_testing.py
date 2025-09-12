@@ -1,0 +1,1 @@
+print("hello world, this a file for config testing")

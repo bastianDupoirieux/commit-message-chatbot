@@ -1,0 +1,1 @@
+print("this is a file for config testing in a subdirectory")

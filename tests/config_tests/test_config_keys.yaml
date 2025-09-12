@@ -1,0 +1,5 @@
+#This file is missing a required key, the test should throw a key error
+
+commit_mode: "standard"
+
+other_key: ["foo.xyz"]

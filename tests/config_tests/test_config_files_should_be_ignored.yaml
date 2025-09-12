@@ -1,0 +1,5 @@
+#This file references a file that exists twice with the same basename in the working directory.
+#The test must throw an error
+commit_mode: "standard"
+
+files_to_ignore: ["file_that_should_be_ignored.py"]
