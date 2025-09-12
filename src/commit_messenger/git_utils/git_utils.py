@@ -1,6 +1,5 @@
 from git import Repo
 
-
 class GitUtils:
 
     def __init__(self, repo: Repo):
@@ -25,5 +24,5 @@ class GitUtils:
 
     def commit_added_files(self, commit_message):
         commit = self.repo.index.commit(commit_message)
-        print(f'Successfuly commited with message: {commit_message} with hash {commit.hexsha}')
+        print(f'Successfuly commited with message: {commit_message} and hash {commit.hexsha}')
 
