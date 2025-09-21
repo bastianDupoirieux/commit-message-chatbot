@@ -1,0 +1,11 @@
+model : "codellama:7b-instruct"
+
+commit_mode: "standard"
+
+files_to_ignore: []
+
+base_prompt: "Here is the diff between staged files in git. Use the diff to write a concise and clear commit message. Output only the commit message:"
+
+retry_prompt: 'Formulate the commit message differently. Output only the commit message'
+
+max_retries: 10

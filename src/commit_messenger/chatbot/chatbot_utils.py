@@ -4,7 +4,7 @@ class OllamaChatbot:
     def __init__(self, model):
         self.model = model
 
-    def check_if_model_exists(self) -> str:
+    def check_if_model_exists(self) -> bool:
         """
         Runs a check to see if the model with which the chatbot is instantiated exists.
         :return: a validation string returning the
@@ -12,9 +12,11 @@ class OllamaChatbot:
         available_models = ollama.list().models
         model_names = [mod.model for mod in available_models]
         if self.model not in model_names:
-            return f"Model {self.model} not installed, please install to continue"
+            print(f"Model {self.model} not installed, please install to continue")
+            return False
         else:
-            return f"Running with model {self.model}"
+            print(f"Running with model {self.model}")
+            return True
 
 
     def pull_model(self):

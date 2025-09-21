@@ -11,6 +11,9 @@ dependencies = [
 ]
 authors=[{name= "Bastian Dupoirieux", email = "bast.dupo@gmail.com"}]
 
+[project.scripts]
+commit_messenger = "commit_messenger.main:cli"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

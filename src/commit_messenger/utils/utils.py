@@ -9,7 +9,7 @@ class GitUtils:
 
     def get_git_diff(self):
 
-        return self.repo.index.diff("HEAD")
+        return self.repo.index.diff("HEAD", create_patch = True)
 
     def see_added_files(self):
         """
@@ -19,10 +19,10 @@ class GitUtils:
         git_diff = self.get_git_diff()  # create the diff compared to HEAD
         return [d.a_path for d in git_diff]
 
-    def get_diff_from_staged_files(self, file):
+    def get_diff_from_staged_files(self, file) -> str:
         git_diff = self.get_git_diff()
         diff_index = self.see_added_files().index(file)
-        return git_diff[diff_index].diff
+        return str(git_diff[diff_index].diff)
 
     def commit_added_files(self, commit_message):
         commit = self.repo.index.commit(commit_message)
@@ -31,10 +31,12 @@ class GitUtils:
 class Config:
     def __init__(self, config:dict):
         self.config = config
-        self.config_keys = ["commit_mode", "files_to_ignore"] # the required fields
+        self.config_keys = ["commit_mode", "files_to_ignore", "model"] # the required fields
         #Is there a better way to write these required fields outside the class defintion, without a config for the config?
-        project_handler = ProjectHandler()
+        project_handler = _ProjectHandler()
         self.project_files = project_handler.files_in_dir
+        self.permitted_commit_modes = ['standard', 'yolo']
+        self.commit_mode = config['commit_mode'].lower()
 
     def run_config_checks(self):
         """Check if the config passed is correct"""
@@ -47,6 +49,9 @@ class Config:
         if type(self.config["files_to_ignore"]) != list:
             type_given = self.config["files_to_ignore"]
             raise TypeError(f"files_to_ignore must be a list, given type {type_given}")
+
+        if self.commit_mode not in self.permitted_commit_modes:
+            raise ValueError(f"Commit mode {self.commit_mode} is not permitted, must be one of {', '.join(self.permitted_commit_modes)}")
 
         #Check if the file that should be ignored in the config is unique in the working dir
         for f in self.config["files_to_ignore"]:
@@ -67,8 +72,10 @@ class Config:
             pass # Do I need any handling depending on whether it is a path or just a basename?
         if file in self.config["files_to_ignore"]:
             raise ValueError(f"File {file} should be ignored, commit message can't be generated")
+        else:
+            pass
 
-class ProjectHandler:
+class _ProjectHandler:
     def __init__(self):
         self.dir = os.getcwd()
         directories_to_ignore = [os.path.join(self.dir, '.git'),
